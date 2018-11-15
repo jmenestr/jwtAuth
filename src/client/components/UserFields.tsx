@@ -1,6 +1,12 @@
 import * as React from 'react'
 
-const UserFields = () =>
+interface Props {
+    onFirstNameChange: React.EventHandler<React.ChangeEvent>
+    onLastNameChange: React.EventHandler<React.ChangeEvent>
+    firstName: string;
+    lastName:string
+}
+const UserFields = (props: Props) =>
     <div className="mb-4 flex justify-center">
         <div className='flex-1 mr-4'>
             <label
@@ -14,8 +20,8 @@ const UserFields = () =>
             id="firstName"
             type="text"
             placeholder="First Name"
-            // value={this.state.firstName}
-            // onChange={this.onUsernameUpdate}
+            value={props.firstName}
+            onChange={props.onFirstNameChange}
             />
         </div>
 
@@ -31,8 +37,8 @@ const UserFields = () =>
             id="lastName"
             type="text"
             placeholder="Last Name"
-            // value={this.state.firstName}
-            // onChange={this.onUsernameUpdate}
+            value={props.lastName}
+            onChange={props.onLastNameChange}
             />
         </div>
     </div>

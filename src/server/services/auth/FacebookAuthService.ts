@@ -17,7 +17,7 @@ class AuthService implements IAuthService {
         const token = result.access_token
         const stuff = `https://graph.facebook.com/me?fields=email,first_name,last_name&access_token=${token}`
         const userResponse = await fetch(stuff)
-        console.log(userResponse)
+ 
         const { email, first_name: firstName, last_name: lastName } = await userResponse.json()
         return {
             email,

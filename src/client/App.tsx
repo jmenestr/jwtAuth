@@ -7,7 +7,6 @@ import store from './store/index';
 import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import LoginForm from './pages/LoginForm';
 import SignupForm from "./pages/SignupForm";
 export default class App extends React.Component {
 
@@ -17,8 +16,8 @@ export default class App extends React.Component {
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={LoginForm}/>
-          <Route exact path="/signin" component={SignupForm} />
+          <Route exact path="/login" component={SignupForm}/>
+          <Route exact path="/signup" component={SignupForm} />
           <AuthenticatedRoute path="/dashboard" component={Dashboard} />
         </Switch>
       </Router>

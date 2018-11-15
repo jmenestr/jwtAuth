@@ -8,7 +8,7 @@ const router = express.Router()
 const Rounds = 12
 router.post('/signup', async (req, res) => {
 
-    const { email, password } = req.body as { email: string, password: string }
+    const { email, firstName, lastName, password } = req.body as { email: string, password: string }
     const user = await User.findOne({
         where: {
             email
