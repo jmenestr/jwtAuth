@@ -8,6 +8,7 @@ import AuthenticatedRoute from "./routes/AuthenticatedRoute";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import SignupForm from "./pages/SignupForm";
+import PasswordReset from './pages/PasswordReset';
 export default class App extends React.Component {
 
   render() {
@@ -18,6 +19,7 @@ export default class App extends React.Component {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={SignupForm}/>
           <Route exact path="/signup" component={SignupForm} />
+          <Route exact path="/auth/reset" component={PasswordReset} />
           <AuthenticatedRoute path="/dashboard" component={Dashboard} />
         </Switch>
       </Router>

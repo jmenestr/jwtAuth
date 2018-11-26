@@ -8,15 +8,15 @@ const router = express.Router()
 const Rounds = 12
 router.post('/signup', async (req, res) => {
 
-    const { email, firstName, lastName, password } = req.body as { email: string, password: string }
+    const { email, firstName, lastName, password } = req.body as { email: string, password: string, firstName: string, lastName: string}
     const user = await User.findOne({
         where: {
-            email
+            email,
         }
     })
 
     if (user) {
-        res.status(statusCodes.CONFLICT).send({ error: "This Email already exists"})
+        res.status(statusCodes.CONFLICT).send({ error: "This Email already exists. Please login."})
     } else {
         /*
             1. Hash the user password.
@@ -28,6 +28,8 @@ router.post('/signup', async (req, res) => {
         const [user] = await User.findOrCreate({
             where: {
             email,
+            firstName,
+            lastName,
             password: hashedPassword
         }})
         const accessToken = user.getJwtToken()
@@ -39,7 +41,7 @@ router.post('/signup', async (req, res) => {
 
 })
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
     const { email, password } = req.body
             /*
             1. Hash the user password.
@@ -53,9 +55,13 @@ router.post("/login", async (req, res) => {
         where: {
         email,
     }})
+
     if (!user) {
-        res.send('No User Exists')
+        res.status(statusCodes.NOT_FOUND).send({ error: "Password and Username are incorrect. Please try again"})
+        res.end()
+        next()
     }
+
     const authed = bcrypt.compareSync(password, user.password)
 
     if (authed) {
@@ -64,7 +70,8 @@ router.post("/login", async (req, res) => {
         res.cookie("accessToken", accessToken, { expires })
         res.end()
     } else {
-        res.send('failed')
+        res.status(statusCodes.NOT_FOUND).send({ error: "Password and Username are incorrect. Please try again"})
+        res.end()
     }
 
 })

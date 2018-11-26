@@ -42,7 +42,11 @@ export const login = createAsync<LoginParams, void>('Login', async (params, disp
         }
       })
 
-      if (!res.ok) { throw new Error('Failed to Login') }
+      if (!res.ok) { 
+        const message = await res.json()
+
+        throw new Error(message.error) 
+      }
 
       location.href = '/'
       return;
@@ -59,7 +63,11 @@ export const signup  = createAsync<SignupParams, void>('SignUp', async (params, 
         }
       })
 
-      if (!res.ok) { throw new Error('Failed to Signup') }
+      if (!res.ok) { 
+          const message = await res.json()
+
+          throw new Error(message.error) 
+        }
 
       location.href = '/'
       return;
@@ -87,13 +95,19 @@ export const authReducer = reducerWithInitialState(initialState)
             [key]: val
         }
     })
+    .cases([login.async.started, signup.async.started], (state) => {
+        return {
+            ...state,
+            error: undefined,
+        }
+    })
     .cases([login.async.done, signup.async.done], (state) => {
         return {
             ...state,
             isAuthenticated: true
         }
     })
-    .case(login.async.failed, (state, { error }) => {
+    .cases([login.async.failed, signup.async.failed], (state, { error }) => {
         return {
             ...state,
             isAuthenticated: false,

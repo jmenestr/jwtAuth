@@ -1,4 +1,4 @@
-import { signup, updateLoginField, AuthState } from '../store/auth';
+import { signup, updateLoginField, AuthState, login } from '../store/auth';
 import BaseForm from '../components/BaseForm';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -10,16 +10,19 @@ export interface MappedProps {
   lastName: string;
   email: string;
   password: string;
+  error?: string;
 }
 
 const mapStateToProps = (state: { auth: AuthState}): MappedProps => ({
   firstName: state.auth.firstName,
   lastName: state.auth.lastName,
   email: state.auth.email,
-  password: state.auth.email,
+  password: state.auth.password,
+  error: state.auth.error,
 })
 export interface MappedDispatch {
-  onSubmit: (email: string, password: string, firstName?: string, lastName?: string) => void;
+  signup: (email: string, password: string, firstName?: string, lastName?: string) => void;
+  login: (email: string, password: string) => void;
   onFirstNameChange: React.EventHandler<React.ChangeEvent>
   onLastNameChange: React.EventHandler<React.ChangeEvent>
   onEmailChange: React.EventHandler<React.ChangeEvent>
@@ -27,7 +30,8 @@ export interface MappedDispatch {
 }
 
 const mapDispatchToProps = (dispatch): MappedDispatch => ({
-  onSubmit: (email: string, password: string, firstName: string, lastName: string) => dispatch(signup.action({ email, password, firstName, lastName })),
+  signup: (email: string, password: string, firstName: string = '', lastName: string = '') => dispatch(signup.action({ email, password, firstName, lastName })),
+  login: (email: string, password: string) => dispatch(login.action({ email, password})),
   onFirstNameChange: (event: React.ChangeEvent<HTMLInputElement>) => dispatch(updateLoginField({ event, key: 'firstName'})),
   onLastNameChange: (event: React.ChangeEvent<HTMLInputElement>) => dispatch(updateLoginField({ event, key: 'lastName'})),
   onEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => dispatch(updateLoginField({ event, key: 'email'})),
